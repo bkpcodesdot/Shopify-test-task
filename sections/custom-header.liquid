@@ -1,0 +1,161 @@
+<div class="custom-header-main-wrapper">
+  <div class="custom-header page-width">
+    <div class="custom-header-inner-wrapper">
+    <!-- Mobile Menu Toggle -->
+    <button class="menu-toggle" aria-label="Toggle menu">
+      <span class="menu-icon">☰</span>
+      <span class="close-icon" style="display:none;">✕</span>
+    </button>
+
+    <!-- Logo -->
+    <div class="custom-header__logo">
+      {% if section.settings.logo_image != blank %}
+        <img 
+          src="{{ section.settings.logo_image | image_url: width: 200 }}" 
+          alt="{{ section.settings.logo_text }}" 
+          width=""
+          height=""
+        />
+      {% else %}
+        {{ section.settings.logo_text }}
+      {% endif %}
+    </div>
+
+    <!-- Subheading + Button -->
+    <div class="custom-header__subheading">
+      {{ section.settings.subheading }}
+    </div>
+    <div class="custom-header__button">
+      <a href="{{ section.settings.button_link }}">
+        {{ section.settings.button_text }}
+        <img 
+          src="https://cdn.shopify.com/s/files/1/0721/5382/5451/files/Line_15.svg?v=1756365710" 
+          alt="arrow icon" 
+          class="custom-header__icon"
+          width=""
+          height=""
+        />
+      </a>
+    </div>
+    </div>
+
+    <!-- Navigation (hidden by default for mobile) -->
+    <div class="custom-header__content">
+        <div class="custom-header__subheading abs">
+        {{ section.settings.subheading }}
+      </div>
+      <div class="custom-header__button abs">
+        <a href="{{ section.settings.button_link }}">
+          {{ section.settings.button_text }}
+          <img 
+            src="https://cdn.shopify.com/s/files/1/0721/5382/5451/files/Line_15.svg?v=1756365710" 
+            alt="arrow icon" 
+            class="custom-header__icon"
+            height=""
+            width=""
+          />
+        </a>
+      </div>
+      <nav class="custom-header__nav">
+        <ul>
+          {% if section.settings.main_menu != blank %}
+            {% for link in linklists[section.settings.main_menu].links %}
+              <li>
+                <a href="{{ link.url }}">{{ link.title }}</a>
+              </li>
+            {% endfor %}
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+{% schema %}
+{
+  "name": "Custom Header",
+  "settings": [
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo Text",
+      "default": "TISSO VISON",
+      "info": "Displayed if no image is uploaded."
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo Image (optional)",
+      "info": "Upload an image logo. If left empty, text logo will show."
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading Text",
+      "default": "Find the ideal gift for your loved ones."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "CHOOSE GIFT"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link",
+      "default": "/collections/all"
+    },
+    {
+      "type": "link_list",
+      "id": "main_menu",
+      "label": "Select Menu"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Header",
+      "category": "Header"
+    }
+  ]
+}
+{% endschema %}
+
+{% javascript %}
+document.addEventListener("DOMContentLoaded", function () {
+  const toggleBtn = document.querySelector(".menu-toggle");
+  const menuContent = document.querySelector(".custom-header__content");
+  const menuIcon = document.querySelector(".menu-toggle .menu-icon");
+  const closeIcon = document.querySelector(".menu-toggle .close-icon");
+
+  toggleBtn.addEventListener("click", () => {
+    menuContent.classList.toggle("active");
+    menuIcon.style.display = menuContent.classList.contains("active") ? "none" : "inline";
+    closeIcon.style.display = menuContent.classList.contains("active") ? "inline" : "none";
+  });
+});
+{% endjavascript %}
+
+{% style %}
+.custom-header__content {
+  display: none;
+}
+.custom-header__content.active {
+    display: block;
+    position: absolute;
+    z-index: 100;
+}
+.custom-header__nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.custom-header__nav li {
+  margin: 0 0 10px;
+}
+.custom-header__nav a {
+  text-decoration: none;
+  color: inherit;
+}
+{% endstyle %}
